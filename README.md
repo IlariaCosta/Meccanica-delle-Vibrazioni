@@ -1,4 +1,4 @@
-codice macchinetta bluetooth è l'ultimo upgrade, 
+codice macchinetta è l'ultimo upgrade, 
 funziona sia tramite
 - pulsante: una volta premuto il pulsante sulla macchina i motori accelerano,
   rimangono a velocita costante pe qualche secondo, e poi decelerano fino a fermarsi
