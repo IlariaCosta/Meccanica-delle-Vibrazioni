@@ -2,10 +2,10 @@ clear all
 clc
 close all
 %% Caricamento misure da file esterno
-filename='datiprova.txt';
-%filename='DATI-Cemento.txt';
-%filename='DATI-Asfalto.txt';
-%filename='DATI-Parquet.txt';
+%filename='datiprova.txt';
+%filename='asfalto.txt';
+%filename='brecciolato.txt';
+filename='pavimentoliscio.txt';
 
 
 Measures = importdata(filename)*9.81; %% portiamo in m/s^2 
