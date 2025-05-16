@@ -16,7 +16,15 @@ bool lastButtonState = HIGH;
 
 // Accelerometro
 const int MPU_I2C_ADDR = 0x68;
-int16_t AcX, AcY, AcZ;
+float AcX, AcY, AcZ;
+// offset accelerometro
+int16_t  ax_offset = 0;
+int16_t  ay_offset = 0;
+int16_t  az_offset = 0;
+//int16_t  az_offset = -10794;
+float AcXnew = 0;
+float AcXold = 0;
+int i = 1; // contatore iniziale a 1 per evitare divisione per zero
 
 // Stato
 bool isMoving = false;
@@ -48,29 +56,42 @@ void setup() {
   Wire.endTransmission(true);
 
   Wire.beginTransmission(MPU_I2C_ADDR);
-  Wire.write(0x08);  // Range ±2g
-  Wire.write(0x00);
+  Wire.write(0x1C);  // Registro accelerometro
+  Wire.write(0x08);  // Imposta ±4g
+
   Wire.endTransmission(true);
 
   lcd.setCursor(0, 1);
   lcd.print("Pronto         ");
+
+
 }
 
 void loop() {
+  i = i+1; //contatore
   // Legge dati accelerometro e invia via Bluetooth
-  Wire.beginTransmission(MPU_I2C_ADDR);
-  Wire.write(0x3B);  // Registro ACCEL_XOUT_H
-  Wire.endTransmission(false);
-  Wire.requestFrom(MPU_I2C_ADDR, 6, true);
+    Wire.beginTransmission(MPU_I2C_ADDR);
+    Wire.write(0x3B);  // Registro ACCEL_XOUT_H
+    Wire.endTransmission(false);
+    Wire.requestFrom(MPU_I2C_ADDR, 6, true);
+  /*
+    AcX = (Wire.read() << 8 | Wire.read());
+    AcY = (Wire.read() << 8 | Wire.read());
+    AcZ = (Wire.read() << 8 | Wire.read());
+  */
+    
+    AcX = (Wire.read() << 8 | Wire.read()) + ax_offset;
+    AcY = (Wire.read() << 8 | Wire.read()) + ay_offset;
+    AcZ = (Wire.read() << 8 | Wire.read()) + az_offset;
+    
 
-  AcX = Wire.read() << 8 | Wire.read();
-  AcY = Wire.read() << 8 | Wire.read();
-  AcZ = Wire.read() << 8 | Wire.read();
 
-  String out = String(AcZ);
+    String out = String(AcX) + ", " + String(AcY) + ", " + String(AcZ);
   //BTSerial.println(out);
   //Serial.println(out);  // Commenta questa riga se non serve il monitor seriale
-
+  //Serial.print(millis());
+  //Serial.print(", ");
+  Serial.println(AcZ/8192);
   lcd.setCursor(0, 0);
   lcd.print(out);
   lcd.print("     ");  // Spazi per pulire residui
@@ -90,13 +111,13 @@ void loop() {
       analogWrite(enB, speed);
       digitalWrite(in1, HIGH); digitalWrite(in2, LOW);
       digitalWrite(in3, HIGH); digitalWrite(in4, LOW);
-      delay(0);
+
     }
 
     // Movimento a velocità costante
     for (int i = 0; i < 300; i++) {
       leggi();
-      delay(0);
+ 
     }
 
     // Decelerazione graduale (255 → 0)
@@ -106,7 +127,7 @@ void loop() {
       analogWrite(enB, speed);
       digitalWrite(in1, HIGH); digitalWrite(in2, LOW);
       digitalWrite(in3, HIGH); digitalWrite(in4, LOW);
-      delay(0);
+
     }
 
     // Ferma motori
@@ -164,13 +185,29 @@ void leggi() {
   Wire.write(0x3B);  // Registro ACCEL_XOUT_H
   Wire.endTransmission(false);
   Wire.requestFrom(MPU_I2C_ADDR, 6, true);
-
-  AcX = Wire.read() << 8 | Wire.read();
-  AcY = Wire.read() << 8 | Wire.read();
-  AcZ = Wire.read() << 8 | Wire.read();
-
-  String out = String(AcZ);
+  /*
+  AcX = (Wire.read() << 8 | Wire.read());
+  AcY = (Wire.read() << 8 | Wire.read());
+  AcZ = (Wire.read() << 8 | Wire.read());
+*/
+  
+   AcX = (Wire.read() << 8 | Wire.read()) + ax_offset;
+  AcY = (Wire.read() << 8 | Wire.read()) + ay_offset;
+  AcZ = (Wire.read() << 8 | Wire.read()) + az_offset;
+  
+  String out = String(AcX) + ", " + String(AcY) + ", " + String(AcZ/8192.0);
   BTSerial.println(out);
   //Serial.println(out);  // Commenta questa riga se non serve il monitor seriale
 
 }
+
+
+
+
+
+
+
+
+
+
+
