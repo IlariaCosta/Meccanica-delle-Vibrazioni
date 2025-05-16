@@ -6,3 +6,4 @@ funziona sia tramite
   e non si ferma fino a quando non viene inviato un ulteriore carattere.
 durante la simulaizone il modulo bluetooth invia continnuamente i dati letti dall'accelerometro.
 che devono essere salvati un file text, e dopo studiati e simulati tramite matlab.
+versione 2.0 è quella aggiornata
