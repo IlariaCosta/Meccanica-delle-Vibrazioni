@@ -8,7 +8,7 @@ close all
 filename= 'pavimento.txt';                 % Nome del file dati con le misure
 Measures = importdata(filename);            % Importa i dati come cell array di stringhe
 
-% visto che viene stampato anche il tempo di igni campione, con le righe
+% visto che viene stampato anche il tempo di ogni campione, con le righe
 % sequenti selezionamo il valore della stringa relativo all'accelerazione,
 % e poi facciamo il cast in double.
 % Estrazione valori asse z (assumiamo che l'ultimo token di ogni riga sia il valore di accelerazione sull’asse z)
