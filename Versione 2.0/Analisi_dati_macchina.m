@@ -8,8 +8,8 @@ close all
 % ****************************************************************************** %
 
 % filename= 'Piastrelle.txt';                  % Nome del file dati con le misure
-filename = 'Asfalto.txt';
-% filename = 'Brecciolato.txt';
+% filename = 'Asfalto.txt';
+filename = 'Brecciolato.txt';
 Measures = importdata(filename);            % Importa i dati come cell array di stringhe
 cleanName = erase(filename, '.txt');
 
@@ -45,8 +45,8 @@ t = (0:L-1)*Ts;                             % Vettore tempi corrispondenti
 % Rimuovo offset DC (la media), per togliere la componente gravitazionale        %
 z_real = z - mean(z);            
 
-% z = smoothdata(z_Real, 'movmean', 15);  lowess
-z = smoothdata(z_real, 'lowess', 15);       % applico uno smoothing ai dati      %
+z = smoothdata(z_real, 'movmean', 15);  
+% z = smoothdata(z_real, 'lowess', 15);       % applico uno smoothing ai dati      %
 
 % stampo prima figura, per il per visualizzare i dati filtrati                   %
 figure(1)
