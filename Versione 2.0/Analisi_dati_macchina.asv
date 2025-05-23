@@ -7,8 +7,8 @@ close all
 % scelta corretta del tempo di campionamento.                                    %
 % ****************************************************************************** %
 
-% filename= 'Piastrelle.txt';                  % Nome del file dati con le misure
-filename = 'Asfalto.txt';
+filename= 'Piastrelle.txt';                  % Nome del file dati con le misure
+% filename = 'Asfalto.txt';
 % filename = 'Brecciolato.txt';
 Measures = importdata(filename);            % Importa i dati come cell array di stringhe
 cleanName = erase(filename, '.txt');
@@ -58,9 +58,6 @@ subtitle(cleanName, 'Interpreter','latex')
 xlabel("Tempo $[s]$", 'Interpreter',  'latex');
 ylabel("Accelerazione z $[m/s^{2}]$", 'Interpreter','latex');
 
-% salvateggio figura
-file = ['confronto_dati_filtrati',cleanName, '.jpg'];
-saveas(gcf,file);
 
 % Filtraggio passa basso Butterworth di 4° ordine per rimuovere rumori ad alta frequenza
 % Fc = 100; % Frequenza di taglio in Hz (più bassa rispetto prima per pulire meglio il segnale)
@@ -107,20 +104,16 @@ fprintf('Smorzamento c = %.4f Ns/m\n', c);
 fprintf('Rigidezza k = %.4f N/m\n', k);
 
 %% Plot per confrontare dati e modello
-a_model = c * v + k * x;   % accelerazione predetta dal modello smorzamento + rigidezza
+a_model = c * v + k * x;   % Forza predetta dal modello smorzamento + rigidezza
 a_model1 = (c/m) * v+ (k/m) * x; 
 figure(3)
 plot(t, -a_moto, 'b', t, a_model1, 'r--', 'LineWidth', 1.5)
 legend('$a_{sperimentale}$', '$a_{modello}$', 'Interpreter', 'latex', 'FontSize',12);
-title('\textbf{Confronto tra dati e modello}', 'Interpreter','latex');
+title('Confronto tra dati e modello', 'Interpreter','latex');
 subtitle(cleanName, 'Interpreter','latex')
-xlabel('Tempo [s]', 'Interpreter','latex')
-ylabel('Forza [N]', 'Interpreter','latex')
+xlabel('Tempo (s)')
+ylabel('Forza (N)')
 grid on
-
-% salvateggio figura
-file = ['confronto_accelerazione_modello_e_reale_',cleanName, '.jpg'];
-saveas(gcf,file);
 
 %% Analisi frequenziale 
 figure
@@ -131,12 +124,8 @@ P1 = P2(1:len_d/2+1);
 P1(2:end-1) = 2*P1(2:end-1);
 f = Fs*(0:(len_d/2))/len_d;
 plot(f,P1) 
-title('\textbf{Analisi frequenziale}', 'Interpreter','latex')
+title('Analisi frequenziale')
 subtitle(cleanName, 'Interpreter','latex')
-xlabel('$f$ [Hz]', 'Interpreter','latex')
-ylabel('$|P1(f)|$', 'Interpreter','latex')
+xlabel('f (Hz)')
+ylabel('|P1(f)|')
 xlim([0 50]);
-
-% salvateggio figura
-file = ['Analisi_frequenziale_',cleanName, '.jpg'];
-saveas(gcf,file);
