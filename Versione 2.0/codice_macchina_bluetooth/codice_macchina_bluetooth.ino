@@ -4,12 +4,9 @@
 // Inizializzazione LCD: RS, E, D4, D5, D6, D7
 LiquidCrystal lcd(12, 11, 52, 50, 48, 46);
 
-// Pin motori (due motori, con controllo direzione e velocità PWM)
-const int enA = 10, in1 = 9, in2 = 8;    // Motore A
-const int in3 = 7, in4 = 6, enB = 5;     // Motore B
-
 // Pin del pulsante per avvio manuale
 const int buttonPin = 34;
+
 
 // Indirizzo I2C del sensore MPU6050
 const int MPU_I2C_ADDR = 0x68;
@@ -18,10 +15,19 @@ int16_t ax_offset = 0;                  // Offset asse X
 int16_t ay_offset = 0;                  // Offset asse Y
 int16_t az_offset = 0;                  // Offset asse Z
 
+// Timing lettura accelerometro
+unsigned long lastReadTime = 0;
+const unsigned long interval = 2;       // Intervallo di 2ms = 500 Hz
+
 // Parametri per media mobile sull'asse Z
 #define WINDOW_SIZE 10
 float AcZ_window[WINDOW_SIZE] = {0};    // Finestra dati asse Z
 int window_index = 0;                   // Indice per aggiornare finestra
+
+
+// Pin motori (due motori, con controllo direzione e velocità PWM)
+const int enA = 10, in1 = 9, in2 = 8;    // Motore A
+const int in3 = 7, in4 = 6, enB = 5;     // Motore B
 
 // Stato dei motori
 bool isMoving = false;
@@ -30,19 +36,16 @@ bool isMoving = false;
 unsigned long motorStartTime = 0;
 bool buttonPressed = false;
 
-// Comunicazione Bluetooth (Serial1)
-#define BTSerial Serial1
-
-// Timing lettura accelerometro
-unsigned long lastReadTime = 0;
-const unsigned long interval = 2;       // Intervallo di 2ms = 500 Hz
-
 // Parametri decelerazione
 const unsigned long decelStartDelay = 5000;   // Aspetta 5s prima di decelerare
 const unsigned long decelDuration = 5000;     // Decelerazione dura 5s
 int pwmValue = 255;                           // PWM massimo (velocità massima)
 bool isDecelerating = false;
 unsigned long decelStartTime = 0;
+
+
+// Comunicazione Bluetooth (Serial1)
+#define BTSerial Serial1
 
 void setup() {
   // Imposta i pin dei motori come output

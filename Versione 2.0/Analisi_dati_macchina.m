@@ -31,7 +31,8 @@ end
 %% ******************** Parametri di campionamento ***************************** %
 % intervallo di campionamento scelto in base ai valori stampati nei file         %
 
-Ts = 0.002;                                 % Intervallo di campionamento (tempo tra due misure) in secondi (qui 500 Hz)
+Ts = 0.002;                                 % Intervallo di campionamento (tempo tra due misure) 
+                                            % in secondi (qui 500 Hz)
 Fs = 1/Ts;                                  % Frequenza di campionamento (Hz)
 
 %% ******************** FILTRAGIO DEL SEGNALE ********************************** %
@@ -46,7 +47,7 @@ t = (0:L-1)*Ts;                             % Vettore tempi corrispondenti
 z_real = z - mean(z);            
 
 z = smoothdata(z_real, 'movmean', 15);  
-% z = smoothdata(z_real, 'lowess', 15);       % applico uno smoothing ai dati      %
+% z = smoothdata(z_real, 'lowess', 15);       % applico uno smoothing ai dati    %
 
 % stampo prima figura, per il per visualizzare i dati filtrati                   %
 figure(1)
@@ -140,3 +141,6 @@ xlim([0 50]);
 % salvateggio figura
 file = ['Analisi_frequenziale_',cleanName, '.jpg'];
 saveas(gcf,file);
+
+
+
